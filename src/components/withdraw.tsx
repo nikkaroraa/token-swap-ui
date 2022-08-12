@@ -11,7 +11,6 @@ import * as Web3 from "@solana/web3.js"
 import { useConnection, useWallet } from "@solana/wallet-adapter-react"
 import { TokenSwap, TOKEN_SWAP_PROGRAM_ID } from "@solana/spl-token-swap"
 import * as token from "@solana/spl-token"
-import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 
 import {
   KRCYPT_TOKEN_MINT,
@@ -24,10 +23,7 @@ import {
   POOL_TOKEN_FEE_ACCOUNT,
 } from "constants/programs"
 
-export const WithdrawSingleTokenType: FC = (props: {
-  onInputChange?: (val: number) => void
-  onMintChange?: (account: string) => void
-}) => {
+export const WithdrawSingleTokenType: FC = () => {
   const [poolTokenAmount, setAmount] = useState(0)
   const { connection } = useConnection()
   const { publicKey, sendTransaction } = useWallet()
@@ -43,49 +39,38 @@ export const WithdrawSingleTokenType: FC = (props: {
       return
     }
 
-    const poolMintInfo = await token.getMint(connection, POOL_TOKEN_MINT)
+    const userPoolTokenAccount = await token.getAssociatedTokenAddress(POOL_TOKEN_MINT, publicKey)
 
-    const kryptATA = await token.getAssociatedTokenAddress(KRCYPT_TOKEN_MINT, publicKey)
-    const scroogeATA = await token.getAssociatedTokenAddress(SCROOGE_TOKEN_MINT, publicKey)
-    const tokenAccountPool = await token.getAssociatedTokenAddress(POOL_TOKEN_MINT, publicKey)
+    const userKryptATA = await token.getAssociatedTokenAddress(KRCYPT_TOKEN_MINT, publicKey)
+    const userScroogeATA = await token.getAssociatedTokenAddress(SCROOGE_TOKEN_MINT, publicKey)
 
-    const transaction = new Web3.Transaction()
+    const poolTokenMintAccount = await token.getMint(connection, POOL_TOKEN_MINT)
 
-    let account = await connection.getAccountInfo(tokenAccountPool)
-
-    if (account == null) {
-      const createATAInstruction = token.createAssociatedTokenAccountInstruction(
-        publicKey,
-        tokenAccountPool,
-        publicKey,
-        POOL_TOKEN_MINT
-      )
-      transaction.add(createATAInstruction)
-    }
-
-    const instruction = TokenSwap.withdrawAllTokenTypesInstruction(
-      TOKEN,
-      swapAuthority,
+    const withdrawIx = TokenSwap.withdrawAllTokenTypesInstruction(
+      TOKEN_SWAP_STATE_ACCOUNT,
+      SWAP_POOL_AUTHORITY,
       publicKey,
       POOL_TOKEN_MINT,
-      feeAccount,
-      tokenAccountPool,
-      poolKryptAccount,
-      poolScroogeAccount,
-      kryptATA,
-      scroogeATA,
+      POOL_TOKEN_FEE_ACCOUNT,
+      userPoolTokenAccount,
+      KRYPT_POOL_TOKEN_ACCOUNT,
+      SCROOGE_POOL_TOKEN_ACCOUNT,
+      userKryptATA,
+      userScroogeATA,
       TOKEN_SWAP_PROGRAM_ID,
-      TOKEN_PROGRAM_ID,
-      poolTokenAmount * 10 ** poolMintInfo.decimals,
+      token.TOKEN_PROGRAM_ID,
+      poolTokenAmount * 10 ** poolTokenMintAccount.decimals,
       0,
       0
     )
 
-    transaction.add(instruction)
+    const tx = new Web3.Transaction()
+    tx.add(withdrawIx)
+
     try {
-      let txid = await sendTransaction(transaction, connection)
-      alert(`Transaction submitted: https://explorer.solana.com/tx/${txid}?cluster=devnet`)
-      console.log(`Transaction submitted: https://explorer.solana.com/tx/${txid}?cluster=devnet`)
+      let txSig = await sendTransaction(tx, connection)
+      alert(`Transaction submitted: https://explorer.solana.com/tx/${txSig}?cluster=devnet`)
+      console.log(`Transaction submitted: https://explorer.solana.com/tx/${txSig}?cluster=devnet`)
     } catch (e) {
       console.log(JSON.stringify(e))
       alert(JSON.stringify(e))
