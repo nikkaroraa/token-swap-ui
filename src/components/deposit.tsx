@@ -13,7 +13,7 @@ import { TokenSwap, TOKEN_SWAP_PROGRAM_ID } from "@solana/spl-token-swap"
 import * as token from "@solana/spl-token"
 
 import {
-  KRCYPT_TOKEN_MINT,
+  KRYPT_TOKEN_MINT,
   SCROOGE_TOKEN_MINT,
   TOKEN_SWAP_STATE_ACCOUNT,
   SWAP_POOL_AUTHORITY,
@@ -39,7 +39,7 @@ export const DepositSingleTokenType: FC = () => {
       return
     }
 
-    const kryptATA = await token.getAssociatedTokenAddress(KRCYPT_TOKEN_MINT, publicKey)
+    const kryptATA = await token.getAssociatedTokenAddress(KRYPT_TOKEN_MINT, publicKey)
     const scroogeATA = await token.getAssociatedTokenAddress(SCROOGE_TOKEN_MINT, publicKey)
 
     const tx = new Web3.Transaction()

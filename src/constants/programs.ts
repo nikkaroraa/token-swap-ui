@@ -30,7 +30,7 @@ export const POOL_TOKEN_FEE_ACCOUNT = new Web3.PublicKey(
   "EY4hgx73saq9xuLr85HNaxGMAK6R5TkvuSDchKbpt291"
 )
 
-export const KRCYPT_TOKEN_MINT = new Web3.PublicKey("DWiD4EVUtnsgqoGbdSK5kBjHRJ7XoGx58WPHBu7t73Dh")
+export const KRYPT_TOKEN_MINT = new Web3.PublicKey("DWiD4EVUtnsgqoGbdSK5kBjHRJ7XoGx58WPHBu7t73Dh")
 export const SCROOGE_TOKEN_MINT = new Web3.PublicKey(
   "4AG5yRYmMcpMxcRvvkLPHHiSdnCnRQhtncs79CoQNnRQ"
 )

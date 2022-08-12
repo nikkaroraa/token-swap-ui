@@ -13,7 +13,7 @@ import { TokenSwap, TOKEN_SWAP_PROGRAM_ID } from "@solana/spl-token-swap"
 import * as token from "@solana/spl-token"
 
 import {
-  KRCYPT_TOKEN_MINT,
+  KRYPT_TOKEN_MINT,
   SCROOGE_TOKEN_MINT,
   TOKEN_SWAP_STATE_ACCOUNT,
   SWAP_POOL_AUTHORITY,
@@ -41,7 +41,7 @@ export const WithdrawSingleTokenType: FC = () => {
 
     const userPoolTokenAccount = await token.getAssociatedTokenAddress(POOL_TOKEN_MINT, publicKey)
 
-    const userKryptATA = await token.getAssociatedTokenAddress(KRCYPT_TOKEN_MINT, publicKey)
+    const userKryptATA = await token.getAssociatedTokenAddress(KRYPT_TOKEN_MINT, publicKey)
     const userScroogeATA = await token.getAssociatedTokenAddress(SCROOGE_TOKEN_MINT, publicKey)
 
     const poolTokenMintAccount = await token.getMint(connection, POOL_TOKEN_MINT)
