@@ -3,8 +3,7 @@ import type { NextPage } from "next"
 import Head from "next/head"
 
 import AppBar from "components/app-bar"
-import Airdrop from "components/airdrop"
-import TokenSwapForm from "components/token-swap"
+import CreateSwapPool from "components/create-swap-pool"
 
 import styles from "styles/Home.module.css"
 
@@ -14,11 +13,10 @@ const Home: NextPage = () => {
       <Head>
         <title>Token Swap</title>
       </Head>
-      <AppBar text={"Token Swap"} />
+      <AppBar text="Create Swap Pool" />
       <Center>
         <Box>
-          <Airdrop />
-          <TokenSwapForm />
+          <CreateSwapPool />
         </Box>
       </Center>
     </div>
